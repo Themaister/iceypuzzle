@@ -54,6 +54,11 @@ void Entity::tile_size(const Vector2i& size)
    m_tile_size = size;
 }
 
+bool Entity::operator==(const Entity& in)
+{
+   return this == &in;
+}
+
 Wall::Wall() {}
 void Wall::update()
 {

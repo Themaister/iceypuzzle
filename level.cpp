@@ -156,7 +156,7 @@ void Level::check_collition()
    {
       for (auto itr2 = entities.begin(); itr2 != entities.end(); ++itr2)
       {
-         if (&(*itr) == &(*itr2))
+         if (*itr == *itr2)
             continue;
 
          Vector2i obj_pos[2] = { (*itr)->pos(), (*itr2)->pos() };

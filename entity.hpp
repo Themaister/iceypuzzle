@@ -25,6 +25,8 @@ class Entity
       void tile_size(const sf::Vector2i& size);
       Movement::Movement direction() const;
 
+      bool operator==(const Entity& in);
+
    protected:
       sf::Sprite sprite;
       sf::Vector2i m_tile_size;
