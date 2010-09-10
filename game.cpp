@@ -53,6 +53,11 @@ bool PuzzleGame::handle_input()
 
          if (code == Key::Z)
             button = Button::A;
+         else if (code == Key::R)
+         {
+            level.reset();
+            break;
+         }
          else
             button = Button::None;
       }

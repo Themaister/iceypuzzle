@@ -27,6 +27,7 @@ class Level
       void update();
       void render();
       bool is_won() const;
+      void reset();
 
    private:
       std::vector<sf::Image> images;
@@ -40,6 +41,7 @@ class Level
       sf::Vector2i tile_size;
       Movement::Movement movement;
       Button::Button button;
+      std::string m_path;
 
       void LoadPictures();
 };

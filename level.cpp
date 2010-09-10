@@ -9,13 +9,17 @@ using namespace std;
 using namespace sf;
 using namespace Game;
 
-enum Images
+namespace Images
 {
-   Hero = 0,
-   Wall,
-   Stone,
-   Slip,
-};
+   enum Images
+   {
+      Hero = 0,
+      Wall,
+      Stone,
+      Slip,
+      Floor,
+   };
+}
 
 Level::Level(RenderWindow& in) : app(in)
 {
@@ -23,20 +27,29 @@ Level::Level(RenderWindow& in) : app(in)
    LoadPictures();
 }
 
-Level::Level(RenderWindow& in, const string& path) : app(in), level_size(Vector2i(16, 16)), tile_size(Vector2i(16, 16))
+Level::Level(RenderWindow& in, const string& path) : app(in), m_path(path)
 {
    LoadPictures();
-   LoadLevelFromFile(path);
+   LoadLevelFromFile(m_path);
+}
+
+void Level::reset()
+{
+   entities.clear();
+   floor.clear();
+   LoadLevelFromFile(m_path);
 }
 
 void Level::LoadPictures()
 {
    images = vector<Image>(5);
-   images[0].LoadFromFile("hero.png");
-   images[1].LoadFromFile("wall.png");
-   images[2].LoadFromFile("stone.png");
-   images[3].LoadFromFile("slip.png");
-   images[4].LoadFromFile("floor.png");
+   images[Images::Hero].LoadFromFile("hero.png");
+   images[Images::Wall].LoadFromFile("wall.png");
+   images[Images::Stone].LoadFromFile("stone.png");
+   images[Images::Slip].LoadFromFile("slip.png");
+   images[Images::Floor].LoadFromFile("floor.png");
+
+   tile_size = Vector2i(images[Images::Hero].GetWidth(), images[Images::Hero].GetHeight());
 }
 
 void Level::SetMovement(const Movement::Movement& in)
@@ -55,9 +68,11 @@ void Level::LoadLevelFromFile(const std::string& path)
    if (!in.is_open())
       return;
 
+   bool loaded_char = false;
    string str;
    int x = 0;
    int y = 0;
+
    for (;!in.eof(); ++y)
    {
       x = 0;
@@ -69,7 +84,7 @@ void Level::LoadLevelFromFile(const std::string& path)
          {
             tmp = Entity_Ptr(new Wall);
             tmp->tile_size(tile_size);
-            tmp->SetImage(images[1]);
+            tmp->SetImage(images[Images::Wall]);
             tmp->pos(Vector2i(x, y));
             entities.push_back(tmp);
          }
@@ -77,23 +92,28 @@ void Level::LoadLevelFromFile(const std::string& path)
          {
             tmp = Entity_Ptr(new Stone);
             tmp->tile_size(tile_size);
-            tmp->SetImage(images[2]);
+            tmp->SetImage(images[Images::Stone]);
             tmp->pos(Vector2i(x, y));
             entities.push_back(tmp);
          }
          else if (*itr == 'H')
          {
+            if (loaded_char)
+            {
+               cout << "Already loaded character!" << endl;
+            }
             character = Entity_Ptr(new Hero);
             character->tile_size(tile_size);
-            character->SetImage(images[0]);
+            character->SetImage(images[Images::Hero]);
             character->pos(Vector2i(x, y));
             entities.push_back(character);
+            loaded_char = true;
          }
          else if (*itr == 'Z')
          {
             tmp = Entity_Ptr(new SlipStone);
             tmp->tile_size(tile_size);
-            tmp->SetImage(images[3]);
+            tmp->SetImage(images[Images::Slip]);
             tmp->pos(Vector2i(x, y));
             entities.push_back(tmp);
          }
@@ -101,7 +121,7 @@ void Level::LoadLevelFromFile(const std::string& path)
          {
             tmp = Entity_Ptr(new Floor);
             tmp->tile_size(tile_size);
-            tmp->SetImage(images[4]);
+            tmp->SetImage(images[Images::Floor]);
             tmp->pos(Vector2i(x, y));
             entities.push_back(tmp);
             floor.push_back(tmp);
@@ -113,6 +133,11 @@ void Level::LoadLevelFromFile(const std::string& path)
             cout << "OMG ERROR IN FILE at: " << "(" << x << ", " << y << ")!" << endl;
          }
       }
+   }
+
+   if (!loaded_char)
+   {
+      cout << "ERROR. MISSING CHARACTER!" << endl;
    }
    in.close();
 }
