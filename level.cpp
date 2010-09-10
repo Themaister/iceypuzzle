@@ -31,6 +31,7 @@ namespace Images
 Level::Level(RenderWindow& in) : app(in)
 {
    app.UseVerticalSync(true);
+   app.SetFramerateLimit(30);
    LoadPictures();
 }
 
@@ -44,6 +45,8 @@ void Level::reset()
 {
    entities.clear();
    floor.clear();
+   images.clear();
+   LoadPictures();
    LoadLevelFromFile(m_path);
 }
 
@@ -80,8 +83,13 @@ void Level::LoadLevelFromFile(const std::string& path)
    int x = 0;
    int y = 0;
 
+   int max_x = 0;
+
    for (;!in.eof(); ++y)
    {
+      if (x > max_x)
+         max_x = x;
+
       x = 0;
       getline(in, str);
       for (auto itr = str.begin(); itr != str.end(); ++itr, ++x)
@@ -132,7 +140,7 @@ void Level::LoadLevelFromFile(const std::string& path)
             entities.push_back(tmp);
             floor.push_back(tmp);
          }
-         else if (*itr == '.')
+         else if (*itr == '.' || *itr == ' ')
          {}
          else
          {
@@ -140,6 +148,10 @@ void Level::LoadLevelFromFile(const std::string& path)
          }
       }
    }
+
+   app.Create(VideoMode(tile_size.x * max_x, tile_size.y * (y - 1), 32), "Puzzle" + string("\"") + m_path + string("\""));
+   app.UseVerticalSync(true);
+   app.SetFramerateLimit(30);
 
    if (!loaded_char)
    {

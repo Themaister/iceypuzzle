@@ -1,11 +1,9 @@
-WWWWWWWWWWWWW
-W...........W
-W...........W
-W...Z...Z...W
-W..ZG...GZ..W
-W...........W
-W..ZG...GZ..W
-W...Z...Z...W
-W.....H.....W
-W...........W
-WWWWWWWWWWWWW
+WWWWWWWWWWW
+W         W
+W  Z   Z  W
+W Z G G Z W
+W  Z G Z  W
+W Z G G Z W
+W  Z   Z  W
+W H       W
+WWWWWWWWWWW
