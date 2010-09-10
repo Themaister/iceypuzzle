@@ -12,6 +12,16 @@ namespace Game {
 
 class Entity;
 
+class EInvalidLevel
+{
+   public:
+      explicit EInvalidLevel(std::string&& in);
+      const std::string& err() const;
+
+   private:
+      std::string m_err;
+};
+
 class Level
 {
    public:

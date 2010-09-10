@@ -4,10 +4,17 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 
 using namespace std;
 using namespace sf;
 using namespace Game;
+
+EInvalidLevel::EInvalidLevel(string&& str) : m_err(move(str)) {};
+const string& EInvalidLevel::err() const
+{
+   return m_err;
+}
 
 namespace Images
 {
@@ -99,9 +106,8 @@ void Level::LoadLevelFromFile(const std::string& path)
          else if (*itr == 'H')
          {
             if (loaded_char)
-            {
-               cout << "Already loaded character!" << endl;
-            }
+               throw EInvalidLevel("Cannot have more than one character");
+
             character = Entity_Ptr(new Hero);
             character->tile_size(tile_size);
             character->SetImage(images[Images::Hero]);
@@ -130,14 +136,14 @@ void Level::LoadLevelFromFile(const std::string& path)
          {}
          else
          {
-            cout << "OMG ERROR IN FILE at: " << "(" << x << ", " << y << ")!" << endl;
+            throw EInvalidLevel("Syntax error in file");
          }
       }
    }
 
    if (!loaded_char)
    {
-      cout << "ERROR. MISSING CHARACTER!" << endl;
+      throw EInvalidLevel("Missing character in file");
    }
    in.close();
 }
