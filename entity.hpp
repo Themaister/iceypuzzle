@@ -27,6 +27,8 @@ class Entity
 
       bool operator==(const Entity& in);
 
+      virtual ~Entity() {}
+
    protected:
       sf::Sprite sprite;
       sf::Vector2i m_tile_size;
