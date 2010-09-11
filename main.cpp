@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include <iostream>
+#include <stdexcept>
 
 int main()
 {
@@ -9,9 +10,9 @@ int main()
       Game::PuzzleGame game(app);
       game.run();
    }
-   catch (const Game::EInvalidLevel& err)
+   catch (std::runtime_error& err)
    {
-      std::cerr << err.err() << std::endl;
+      std::cerr << err.what() << std::endl;
    }
    app.Close();
 }

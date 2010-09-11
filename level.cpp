@@ -5,15 +5,33 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <sstream>
+#include <stdexcept>
 
 using namespace std;
 using namespace sf;
 using namespace Game;
 
-EInvalidLevel::EInvalidLevel(string&& str) : m_err(move(str)) {};
-const string& EInvalidLevel::err() const
+
+static void mksubstr(const ostringstream& stream)
 {
-   return m_err;
+   (void)stream;
+}
+
+template<class T, class... Args>
+static void mksubstr(ostringstream& stream, const T& first, const Args&... rest)
+{
+   stream << first;
+   mksubstr(stream, rest...);
+}
+
+template<class T, class... Args>
+static string mkstring(const T& first, const Args&... rest)
+{
+   ostringstream buf;
+   buf << first;
+   mksubstr(buf, rest...);
+   return buf.str();
 }
 
 namespace Images
@@ -114,7 +132,7 @@ void Level::LoadLevelFromFile(const std::string& path)
          else if (*itr == 'H')
          {
             if (loaded_char)
-               throw EInvalidLevel(string("Cannot have more than one character"));
+               throw runtime_error(mkstring("Cannot have more than one character on map: (", x+1, ", ", y+1, ")"));
 
             character = Entity_Ptr(new Hero);
             character->tile_size(tile_size);
@@ -143,9 +161,7 @@ void Level::LoadLevelFromFile(const std::string& path)
          else if (*itr == '.' || *itr == ' ')
          {}
          else
-         {
-            throw EInvalidLevel(string("Syntax error in file"));
-         }
+            throw runtime_error(mkstring("Syntax error in file at: (", x+1, ", ", y+1, ")"));
       }
    }
 
@@ -155,7 +171,7 @@ void Level::LoadLevelFromFile(const std::string& path)
 
    if (!loaded_char)
    {
-      throw EInvalidLevel(string("Missing character in file"));
+      throw runtime_error(mkstring("Missing character in file"));
    }
    in.close();
 }
