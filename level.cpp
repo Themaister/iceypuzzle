@@ -114,7 +114,7 @@ void Level::LoadLevelFromFile(const std::string& path)
          else if (*itr == 'H')
          {
             if (loaded_char)
-               throw EInvalidLevel("Cannot have more than one character");
+               throw EInvalidLevel(string("Cannot have more than one character"));
 
             character = Entity_Ptr(new Hero);
             character->tile_size(tile_size);
@@ -144,18 +144,18 @@ void Level::LoadLevelFromFile(const std::string& path)
          {}
          else
          {
-            throw EInvalidLevel("Syntax error in file");
+            throw EInvalidLevel(string("Syntax error in file"));
          }
       }
    }
 
-   app.Create(VideoMode(tile_size.x * max_x, tile_size.y * (y - 1), 32), "Puzzle" + string("\"") + m_path + string("\""));
+   app.Create(VideoMode(tile_size.x * max_x, tile_size.y * (y - 1), 32), string("Puzzle") + string("\"") + m_path + string("\""));
    app.UseVerticalSync(true);
    app.SetFramerateLimit(30);
 
    if (!loaded_char)
    {
-      throw EInvalidLevel("Missing character in file");
+      throw EInvalidLevel(string("Missing character in file"));
    }
    in.close();
 }

@@ -61,6 +61,8 @@ bool PuzzleGame::handle_input()
          else
             button = Button::None;
       }
+      else if (event.Type == Event::Closed)
+         return false;
    }
 
    level.SetMovement(movement);
