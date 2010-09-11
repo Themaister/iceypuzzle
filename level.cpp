@@ -225,7 +225,7 @@ bool Level::is_won() const
          else if (*(*itr) == *(*itr2))
             continue;
 
-         if ((*itr)->pos() == (*itr2)->pos())
+         if ((*itr)->pos() == (*itr2)->pos() && (*itr2)->speed() == Vector2i(0, 0))
          {
             won_count++;
             continue;
