@@ -34,18 +34,6 @@ static string mkstring(const T& first, const Args&... rest)
    return buf.str();
 }
 
-namespace Images
-{
-   enum Images
-   {
-      Hero = 0,
-      Wall,
-      Stone,
-      Slip,
-      Floor,
-   };
-}
-
 Level::Level(RenderWindow& in) : app(in)
 {
    app.UseVerticalSync(true);
@@ -78,6 +66,35 @@ void Level::LoadPictures()
    images[Images::Floor].LoadFromFile("floor.png");
 
    tile_size = Vector2i(images[Images::Hero].GetWidth(), images[Images::Hero].GetHeight());
+}
+
+void Level::LoadSprite(const Images::Images& type, int x, int y)
+{
+   Entity_Ptr tmp;
+   switch (type)
+   {
+      case Images::Wall:
+         tmp = Entity_Ptr(new Wall);
+         break;
+      case Images::Hero:
+         tmp = Entity_Ptr(new Hero);
+         character = tmp;
+         break;
+      case Images::Stone:
+         tmp = Entity_Ptr(new Stone);
+         break;
+      case Images::Floor:
+         tmp = Entity_Ptr(new Floor);
+         floor.push_back(tmp);
+         break;
+      case Images::Slip:
+         tmp = Entity_Ptr(new SlipStone);
+         break;
+   }
+   tmp->tile_size(tile_size);
+   tmp->SetImage(images[type]);
+   tmp->pos(Vector2i(x, y));
+   entities.push_back(tmp);
 }
 
 void Level::SetMovement(const Movement::Movement& in)
@@ -115,48 +132,32 @@ void Level::LoadLevelFromFile(const std::string& path)
          Entity_Ptr tmp;
          if (*itr == 'W')
          {
-            tmp = Entity_Ptr(new Wall);
-            tmp->tile_size(tile_size);
-            tmp->SetImage(images[Images::Wall]);
-            tmp->pos(Vector2i(x, y));
-            entities.push_back(tmp);
+            LoadSprite(Images::Wall, x, y);
          }
          else if (*itr == 'S')
          {
-            tmp = Entity_Ptr(new Stone);
-            tmp->tile_size(tile_size);
-            tmp->SetImage(images[Images::Stone]);
-            tmp->pos(Vector2i(x, y));
-            entities.push_back(tmp);
+            LoadSprite(Images::Stone, x, y);
          }
          else if (*itr == 'H')
          {
             if (loaded_char)
                throw runtime_error(mkstring("Cannot have more than one character on map: (", x+1, ", ", y+1, ")"));
 
-            character = Entity_Ptr(new Hero);
-            character->tile_size(tile_size);
-            character->SetImage(images[Images::Hero]);
-            character->pos(Vector2i(x, y));
-            entities.push_back(character);
+            LoadSprite(Images::Hero, x, y);
             loaded_char = true;
          }
          else if (*itr == 'Z')
          {
-            tmp = Entity_Ptr(new SlipStone);
-            tmp->tile_size(tile_size);
-            tmp->SetImage(images[Images::Slip]);
-            tmp->pos(Vector2i(x, y));
-            entities.push_back(tmp);
+            LoadSprite(Images::Slip, x, y);
          }
          else if (*itr == 'G')
          {
-            tmp = Entity_Ptr(new Floor);
-            tmp->tile_size(tile_size);
-            tmp->SetImage(images[Images::Floor]);
-            tmp->pos(Vector2i(x, y));
-            entities.push_back(tmp);
-            floor.push_back(tmp);
+            LoadSprite(Images::Floor, x, y);
+         }
+         else if (*itr == 'X')
+         {
+            LoadSprite(Images::Floor, x, y);
+            LoadSprite(Images::Slip, x, y);
          }
          else if (*itr == '.' || *itr == ' ')
          {}

@@ -11,6 +11,18 @@ namespace Game {
 
 class Entity;
 
+namespace Images
+{
+   typedef enum Images
+   {
+      Hero = 0,
+      Wall,
+      Stone,
+      Slip,
+      Floor,
+   } Images;
+}
+
 class Level
 {
    public:
@@ -43,6 +55,7 @@ class Level
       std::string m_path;
 
       void LoadPictures();
+      void LoadSprite(const Images::Images& type, int x, int y);
 };
 }
 
