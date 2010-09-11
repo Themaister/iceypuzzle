@@ -1,9 +1,9 @@
 WWWWWWWWWWW
 W         W
 W  Z   Z  W
-W Z     Z W
-W  Z   Z  W
-W Z   G Z W
+W Z G G Z W
+W  Z G Z  W
+W Z G G Z W
 W  Z   Z  W
 W H       W
 WWWWWWWWWWW
