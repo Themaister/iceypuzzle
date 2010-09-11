@@ -59,9 +59,9 @@ bool Entity::operator==(const Entity& in)
    return this == &in;
 }
 
-Wall::Wall() {}
-void Wall::update()
+void Wall::update(bool can_stop)
 {
+   (void)can_stop;
    obj_speed = Vector2i(0, 0);
 }
 
@@ -70,16 +70,17 @@ void Wall::render(RenderWindow& app) const
    app.Draw(sprite);
 }
 
-bool Wall::is_floor() const
+bool Wall::is_floor(bool slippery) const
 {
+   (void)slippery;
    return false;
 }
 
-Stone::Stone() {}
-void Stone::update()
+void Stone::update(bool can_stop)
 {
    sprite.Move(obj_speed.x * m_tile_size.x, obj_speed.y * m_tile_size.y);
-   obj_speed = Vector2i(0, 0);
+   if (can_stop)
+      obj_speed = Vector2i(0, 0);
 }
 
 void Stone::render(RenderWindow& app) const
@@ -87,14 +88,15 @@ void Stone::render(RenderWindow& app) const
    app.Draw(sprite);
 }
 
-bool Stone::is_floor() const
+bool Stone::is_floor(bool slippery) const
 {
+   (void)slippery;
    return false;
 }
 
-SlipStone::SlipStone() {}
-void SlipStone::update()
+void SlipStone::update(bool can_stop)
 {
+   (void)can_stop;
    sprite.Move(obj_speed.x * m_tile_size.x, obj_speed.y * m_tile_size.y);
 }
 
@@ -103,16 +105,17 @@ void SlipStone::render(RenderWindow& app) const
    app.Draw(sprite);
 }
 
-bool SlipStone::is_floor() const
+bool SlipStone::is_floor(bool slippery) const
 {
+   (void)slippery;
    return false;
 }
 
-Hero::Hero() {}
-void Hero::update()
+void Hero::update(bool can_stop)
 {
    sprite.Move(obj_speed.x * m_tile_size.x, obj_speed.y * m_tile_size.y);
-   obj_speed = Vector2i(0, 0);
+   if (can_stop)
+      obj_speed = Vector2i(0, 0);
 }
 
 void Hero::render(RenderWindow& app) const
@@ -120,14 +123,15 @@ void Hero::render(RenderWindow& app) const
    app.Draw(sprite);
 }
 
-bool Hero::is_floor() const
+bool Hero::is_floor(bool slippery) const
 {
+   (void)slippery;
    return false;
 }
 
-Floor::Floor() {}
-void Floor::update()
+void Floor::update(bool can_stop)
 {
+   (void)can_stop;
    obj_speed = Vector2i(0, 0);
 }
 
@@ -136,8 +140,24 @@ void Floor::render(RenderWindow& app) const
    app.Draw(sprite);
 }
 
-bool Floor::is_floor() const
+bool Floor::is_floor(bool slippery) const
 {
-   return true;
+   return !slippery;
 }
 
+void SlipperyFloor::update(bool can_stop)
+{
+   (void)can_stop;
+   obj_speed = Vector2i(0, 0);
+}
+
+void SlipperyFloor::render(RenderWindow& app) const
+{
+   app.Draw(sprite);
+}
+
+bool SlipperyFloor::is_floor(bool slippery) const
+{
+   (void)slippery;
+   return true;
+}

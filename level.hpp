@@ -20,6 +20,7 @@ namespace Images
       Stone,
       Slip,
       Floor,
+      SlipFloor,
    } Images;
 }
 

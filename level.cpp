@@ -13,7 +13,7 @@ using namespace sf;
 using namespace Game;
 
 
-static void mksubstr(const ostringstream& stream)
+static void mksubstr(ostringstream& stream)
 {
    (void)stream;
 }
@@ -58,12 +58,13 @@ void Level::reset()
 
 void Level::LoadPictures()
 {
-   images = vector<Image>(5);
+   images = vector<Image>(6);
    images[Images::Hero].LoadFromFile("hero.png");
    images[Images::Wall].LoadFromFile("wall.png");
    images[Images::Stone].LoadFromFile("stone.png");
    images[Images::Slip].LoadFromFile("slip.png");
    images[Images::Floor].LoadFromFile("floor.png");
+   images[Images::SlipFloor].LoadFromFile("slipfloor.png");
 
    tile_size = Vector2i(images[Images::Hero].GetWidth(), images[Images::Hero].GetHeight());
 }
@@ -85,6 +86,10 @@ void Level::LoadSprite(const Images::Images& type, int x, int y)
          break;
       case Images::Floor:
          tmp = Entity_Ptr(new Floor);
+         floor.push_back(tmp);
+         break;
+      case Images::SlipFloor:
+         tmp = Entity_Ptr(new SlipperyFloor);
          floor.push_back(tmp);
          break;
       case Images::Slip:
@@ -159,6 +164,10 @@ void Level::LoadLevelFromFile(const std::string& path)
             LoadSprite(Images::Floor, x, y);
             LoadSprite(Images::Slip, x, y);
          }
+         else if (*itr == 'Y')
+         {
+            LoadSprite(Images::SlipFloor, x, y);
+         }
          else if (*itr == '.' || *itr == ' ')
          {}
          else
@@ -179,6 +188,10 @@ void Level::LoadLevelFromFile(const std::string& path)
 
 void Level::handle_logic()
 {
+
+   if (character->speed() != Vector2i(0, 0))
+      return;
+
    if (movement == Movement::Up)
       character->speed(Vector2i(0, -1));
    else if (movement == Movement::Down)
@@ -290,9 +303,46 @@ void Level::check_collition()
 
 void Level::update()
 {
-   for_each(entities.begin(), entities.end(), [](const Entity_Ptr& ptr) {
-         ptr->update();
-   });
+   for (auto itr = entities.begin(); itr != entities.end(); ++itr)
+   {
+      bool is_slippery = false;
+      for (auto floor_itr = floor.begin(); floor_itr != floor.end(); ++floor_itr)
+      {
+         if (*(*itr) == *(*floor_itr))
+            continue;
+         else if (!(*floor_itr)->is_floor(true))
+            continue;
+
+         auto itr_pos = (*itr)->pos();
+         auto floor_pos = (*floor_itr)->pos();
+
+         switch ((*itr)->direction())
+         {
+            case Movement::Up:
+               if (itr_pos + Vector2i(0, -1) == floor_pos)
+                  is_slippery = true;
+               break;
+            case Movement::Down:
+               if (itr_pos + Vector2i(0, 1) == floor_pos)
+                  is_slippery = true;
+               break;
+            case Movement::Left:
+               if (itr_pos + Vector2i(-1, 0) == floor_pos)
+                  is_slippery = true;
+               break;
+            case Movement::Right:
+               if (itr_pos + Vector2i(1, 0) == floor_pos)
+                  is_slippery = true;
+               break;
+            default:
+               break;
+         }
+      }
+      if (is_slippery)
+         (*itr)->update(false);
+      else
+         (*itr)->update();
+   }
 }
 
 void Level::render()
