@@ -5,7 +5,7 @@ OBJ := main.o entity.o game.o level.o
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
-	$(CXX) -o $(TARGET) $(OBJ) -lsfml-graphics -lsfml-system -lsfml-window
+	$(CXX) -s -o $(TARGET) $(OBJ) -lsfml-graphics -lsfml-system -lsfml-window
 
 clean:
 	rm -f $(TARGET)

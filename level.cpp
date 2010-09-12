@@ -1,6 +1,4 @@
 #include "level.hpp"
-#include <functional>
-#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -51,6 +49,7 @@ void Level::reset()
 {
    entities.clear();
    floor.clear();
+   switch_floor.clear();
    images.clear();
    LoadPictures();
    LoadLevelFromFile(m_path);
