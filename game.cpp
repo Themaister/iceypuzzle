@@ -16,7 +16,7 @@ void PuzzleGame::run()
    {
       if (level.is_won())
       {
-         cout << "OMG U WON, SO 1337" << endl;
+         cout << "You win!" << endl;
          break;
       }
       running = handle_input();
