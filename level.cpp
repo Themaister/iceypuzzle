@@ -58,12 +58,13 @@ void Level::reset()
 
 void Level::LoadPictures()
 {
-   images = vector<Image>(6);
+   images = vector<Image>(7);
    images[Images::Hero].LoadFromFile("hero.png");
    images[Images::Wall].LoadFromFile("wall.png");
    images[Images::Stone].LoadFromFile("stone.png");
    images[Images::Slip].LoadFromFile("slip.png");
    images[Images::Floor].LoadFromFile("floor.png");
+   images[Images::SwitchFloor].LoadFromFile("switch_floor.png");
    images[Images::SlipFloor].LoadFromFile("slipfloor.png");
 
    tile_size = Vector2i(images[Images::Hero].GetWidth(), images[Images::Hero].GetHeight());
@@ -91,6 +92,11 @@ void Level::LoadSprite(const Images::Images& type, int x, int y)
       case Images::SlipFloor:
          tmp = Entity_Ptr(new SlipperyFloor);
          floor.push_back(tmp);
+         break;
+      case Images::SwitchFloor:
+         tmp = Entity_Ptr(new Floor);
+         floor.push_back(tmp);
+         switch_floor.push_back(tmp);
          break;
       case Images::Slip:
          tmp = Entity_Ptr(new SlipStone);
@@ -157,11 +163,11 @@ void Level::LoadLevelFromFile(const std::string& path)
          }
          else if (*itr == 'G')
          {
-            LoadSprite(Images::Floor, x, y);
+            LoadSprite(Images::SwitchFloor, x, y);
          }
          else if (*itr == 'X')
          {
-            LoadSprite(Images::Floor, x, y);
+            LoadSprite(Images::SwitchFloor, x, y);
             LoadSprite(Images::Slip, x, y);
          }
          else if (*itr == 'Y')
@@ -172,6 +178,9 @@ void Level::LoadLevelFromFile(const std::string& path)
          {}
          else
             throw runtime_error(mkstring("Syntax error in file at: (", x+1, ", ", y+1, ")"));
+
+         if (*itr != 'W' && *itr != 'G' && *itr != 'Y')
+            LoadSprite(Images::Floor, x, y);
       }
    }
 
@@ -244,9 +253,9 @@ void Level::handle_logic()
 bool Level::is_won() const
 {
    int won_count = 0;
-   int win_condition = floor.size();
+   int win_condition = switch_floor.size();
 
-   for (auto itr = floor.begin(); itr != floor.end(); ++itr)
+   for (auto itr = switch_floor.begin(); itr != switch_floor.end(); ++itr)
    {
       for (auto itr2 = entities.begin(); itr2 != entities.end(); ++itr2)
       {

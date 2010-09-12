@@ -19,6 +19,7 @@ namespace Images
       Wall,
       Stone,
       Slip,
+      SwitchFloor,
       Floor,
       SlipFloor,
    } Images;
@@ -46,6 +47,7 @@ class Level
       typedef std::shared_ptr<Entity> Entity_Ptr;
       std::vector<Entity_Ptr> entities;
       std::vector<Entity_Ptr> floor;
+      std::vector<Entity_Ptr> switch_floor;
       Entity_Ptr character;
 
       sf::RenderWindow& app;

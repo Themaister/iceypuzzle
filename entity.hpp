@@ -13,9 +13,9 @@ class Entity
 
       void SetImage(const sf::Image& img);
 
-      virtual void update(bool can_stop = true) = 0;
-      virtual void render(sf::RenderWindow& app) const = 0;
-      virtual bool is_floor(bool slippery = false) const = 0;
+      virtual void update(bool can_stop = true);
+      virtual void render(sf::RenderWindow& app) const;
+      virtual bool is_floor(bool slippery = false) const;
 
       sf::Vector2i pos() const;
       void pos(const sf::Vector2i& tile_pos);
@@ -38,54 +38,39 @@ class Entity
 };
 
 class Wall : public Entity
-{
-   public:
-      void update(bool can_stop);
-      void render(sf::RenderWindow& app) const;
-      bool is_floor(bool slippery) const;
-
-};
+{};
 
 class Hero : public Entity
 {
    public:
       void update(bool can_stop);
-      void render(sf::RenderWindow& app) const;
-      bool is_floor(bool slippery) const;
 };
 
 class Stone : public Entity
 {
    public:
       void update(bool can_stop);
-      void render(sf::RenderWindow& app) const;
-      bool is_floor(bool slippery) const;
 };
 
 class SlipStone : public Entity
 {
    public:
       void update(bool can_stop);
-      void render(sf::RenderWindow& app) const;
-      bool is_floor(bool slippery) const;
 };
 
 class Floor : public Entity
 {
    public:
-      void update(bool can_stop);
-      void render(sf::RenderWindow& app) const;
       bool is_floor(bool slippery) const;
 };
 
 class SlipperyFloor : public Entity
 {
    public:
-      void update(bool can_stop);
-      void render(sf::RenderWindow& app) const;
       bool is_floor(bool slippery) const;
 
 };
+
 }
 
 #endif
