@@ -59,13 +59,13 @@ void Level::reset()
 void Level::LoadPictures()
 {
    images = vector<Image>(7);
-   images[Images::Hero].LoadFromFile("hero.png");
-   images[Images::Wall].LoadFromFile("wall.png");
-   images[Images::Stone].LoadFromFile("stone.png");
-   images[Images::Slip].LoadFromFile("slip.png");
-   images[Images::Floor].LoadFromFile("floor.png");
-   images[Images::SwitchFloor].LoadFromFile("switch_floor.png");
-   images[Images::SlipFloor].LoadFromFile("slipfloor.png");
+   images[Images::Hero].LoadFromFile("pics/hero.png");
+   images[Images::Wall].LoadFromFile("pics/wall.png");
+   images[Images::Stone].LoadFromFile("pics/stone.png");
+   images[Images::Slip].LoadFromFile("pics/slip.png");
+   images[Images::Floor].LoadFromFile("pics/floor.png");
+   images[Images::SwitchFloor].LoadFromFile("pics/switch_floor.png");
+   images[Images::SlipFloor].LoadFromFile("pics/slipfloor.png");
 
    tile_size = Vector2i(images[Images::Hero].GetWidth(), images[Images::Hero].GetHeight());
 }
