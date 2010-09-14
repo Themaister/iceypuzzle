@@ -356,13 +356,13 @@ void Level::update()
 void Level::render()
 {
    app.Clear();
-   for (auto itr = floor.begin(); itr != floor.end(); ++itr)
-      (*itr)->render(app);
-   for (auto itr = entities.begin(); itr != entities.end(); ++itr)
-   {
-      if (!(*itr)->is_floor())
-         (*itr)->render(app);
-   }
+   for_each(floor.begin(), floor.end(), [this](const Entity_Ptr& itr) {
+      itr->render(app);
+   });
+   for_each(entities.begin(), entities.end(), [this](const Entity_Ptr& itr) {
+      if (!itr->is_floor())
+         itr->render(app);
+   });
    app.Display();
 }
 
