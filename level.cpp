@@ -192,6 +192,11 @@ void Level::LoadLevelFromFile(const std::string& path)
       throw runtime_error(mkstring("Missing character in file"));
    }
    in.close();
+
+   if (switch_floor.size() == 0)
+   {
+      throw runtime_error(mkstring("Cannot have level without a win condition."));
+   }
 }
 
 void Level::handle_logic()
