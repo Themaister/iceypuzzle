@@ -3,34 +3,13 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <sstream>
 #include <stdexcept>
+#include "utils.hpp"
 
 using namespace std;
 using namespace sf;
 using namespace Game;
 
-
-static void mksubstr(ostringstream& stream)
-{
-   (void)stream;
-}
-
-template<class T, class... Args>
-static void mksubstr(ostringstream& stream, const T& first, const Args&... rest)
-{
-   stream << first;
-   mksubstr(stream, rest...);
-}
-
-template<class T, class... Args>
-static string mkstring(const T& first, const Args&... rest)
-{
-   ostringstream buf;
-   buf << first;
-   mksubstr(buf, rest...);
-   return buf.str();
-}
 
 Level::Level(RenderWindow& in) : app(in)
 {
@@ -151,7 +130,7 @@ void Level::LoadLevelFromFile(const std::string& path)
          else if (*itr == 'H')
          {
             if (loaded_char)
-               throw runtime_error(mkstring("Cannot have more than one character on map: (", x+1, ", ", y+1, ")"));
+               throw runtime_error(join("Cannot have more than one character on map: (", x+1, ", ", y+1, ")"));
 
             LoadSprite(Images::Hero, x, y);
             loaded_char = true;
@@ -176,26 +155,26 @@ void Level::LoadLevelFromFile(const std::string& path)
          else if (*itr == '.' || *itr == ' ')
          {}
          else
-            throw runtime_error(mkstring("Syntax error in file at: (", x+1, ", ", y+1, ")"));
+            throw runtime_error(join("Syntax error in file at: (", x+1, ", ", y+1, ")"));
 
          if (*itr != 'W' && *itr != 'G' && *itr != 'Y')
             LoadSprite(Images::Floor, x, y);
       }
    }
 
-   app.Create(VideoMode(tile_size.x * max_x, tile_size.y * (y - 1), 32), string("Puzzle") + string("\"") + m_path + string("\""));
+   app.Create(VideoMode(tile_size.x * max_x, tile_size.y * (y - 1), 32), join("Puzzle", "|| \"", m_path, "\""));
    app.UseVerticalSync(true);
    app.SetFramerateLimit(30);
 
    if (!loaded_char)
    {
-      throw runtime_error(mkstring("Missing character in file"));
+      throw runtime_error(join("Missing character in file"));
    }
    in.close();
 
    if (switch_floor.size() == 0)
    {
-      throw runtime_error(mkstring("Cannot have level without a win condition."));
+      throw runtime_error(join("Cannot have level without a win condition."));
    }
 }
 
