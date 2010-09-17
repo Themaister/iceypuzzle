@@ -31,11 +31,12 @@ Level::Level(RenderWindow& in, const string& path) : app(in), level_size(Vector2
 
 void Level::LoadPictures()
 {
-   images = vector<Image>(4);
+   images = vector<Image>(5);
    images[0].LoadFromFile("hero.png");
    images[1].LoadFromFile("wall.png");
    images[2].LoadFromFile("stone.png");
    images[3].LoadFromFile("slip.png");
+   images[4].LoadFromFile("floor.png");
 }
 
 void Level::SetMovement(const Movement::Movement& in)
@@ -96,6 +97,15 @@ void Level::LoadLevelFromFile(const std::string& path)
             tmp->pos(Vector2i(x, y));
             entities.push_back(tmp);
          }
+         else if (*itr == 'G')
+         {
+            tmp = Entity_Ptr(new Floor);
+            tmp->tile_size(tile_size);
+            tmp->SetImage(images[4]);
+            tmp->pos(Vector2i(x, y));
+            entities.push_back(tmp);
+            floor.push_back(tmp);
+         }
          else if (*itr == '.')
          {}
          else
@@ -129,25 +139,57 @@ void Level::handle_logic()
          if (hero_pos.x + 1 == obj_pos.x && hero_pos.y == obj_pos.y && character->direction() == Movement::Right)
          {
             (*itr)->speed(Vector2i(1, 0));
+            if ((*itr)->is_floor())
+               continue;
             break;
          }
          else if (hero_pos.x == obj_pos.x && hero_pos.y + 1 == obj_pos.y && character->direction() == Movement::Down)
          {
             (*itr)->speed(Vector2i(0, 1));
+            if ((*itr)->is_floor())
+               continue;
             break;
          }
          else if (hero_pos.x == obj_pos.x + 1 && hero_pos.y == obj_pos.y && character->direction() == Movement::Left)
          {
             (*itr)->speed(Vector2i(-1, 0));
+            if ((*itr)->is_floor())
+               continue;
             break;
          }
          else if (hero_pos.x == obj_pos.x && hero_pos.y == obj_pos.y + 1 && character->direction() == Movement::Up)
          {
             (*itr)->speed(Vector2i(0, -1));
+            if ((*itr)->is_floor())
+               continue;
             break;
          }
       }
    }
+}
+
+bool Level::is_won() const
+{
+   int won_count = 0;
+   int win_condition = floor.size();
+
+   for (auto itr = floor.begin(); itr != floor.end(); ++itr)
+   {
+      for (auto itr2 = entities.begin(); itr2 != entities.end(); ++itr2)
+      {
+         if (*(*itr2) == *character)
+            continue;
+         else if (*(*itr) == *(*itr2))
+            continue;
+
+         if ((*itr)->pos() == (*itr2)->pos())
+         {
+            won_count++;
+            continue;
+         }
+      }
+   }
+   return won_count == win_condition;
 }
 
 void Level::check_collition()
@@ -156,7 +198,9 @@ void Level::check_collition()
    {
       for (auto itr2 = entities.begin(); itr2 != entities.end(); ++itr2)
       {
-         if (*itr == *itr2)
+         if (*(*itr) == *(*itr2))
+            continue;
+         else if ((*itr)->is_floor() || (*itr2)->is_floor())
             continue;
 
          Vector2i obj_pos[2] = { (*itr)->pos(), (*itr2)->pos() };
@@ -194,8 +238,13 @@ void Level::update()
 void Level::render()
 {
    app.Clear();
-   for (auto itr = entities.begin(); itr != entities.end(); ++itr)
+   for (auto itr = floor.begin(); itr != floor.end(); ++itr)
       (*itr)->render(app);
+   for (auto itr = entities.begin(); itr != entities.end(); ++itr)
+   {
+      if (!(*itr)->is_floor())
+         (*itr)->render(app);
+   }
    app.Display();
 }
 

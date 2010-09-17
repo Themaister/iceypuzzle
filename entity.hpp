@@ -15,6 +15,7 @@ class Entity
 
       virtual void update() = 0;
       virtual void render(sf::RenderWindow& app) const = 0;
+      virtual bool is_floor() const = 0;
 
       sf::Vector2i pos() const;
       void pos(const sf::Vector2i& tile_pos);
@@ -42,6 +43,7 @@ class Wall : public Entity
       Wall();
       void update();
       void render(sf::RenderWindow& app) const;
+      bool is_floor() const;
 
 };
 
@@ -51,7 +53,7 @@ class Hero : public Entity
       Hero();
       void update();
       void render(sf::RenderWindow& app) const;
-
+      bool is_floor() const;
 };
 
 class Stone : public Entity
@@ -60,7 +62,7 @@ class Stone : public Entity
       Stone();
       void update();
       void render(sf::RenderWindow& app) const;
-
+      bool is_floor() const;
 };
 
 class SlipStone : public Entity
@@ -69,8 +71,18 @@ class SlipStone : public Entity
       SlipStone();
       void update();
       void render(sf::RenderWindow& app) const;
-
+      bool is_floor() const;
 };
+
+class Floor : public Entity
+{
+   public:
+      Floor();
+      void update();
+      void render(sf::RenderWindow& app) const;
+      bool is_floor() const;
+};
+
 }
 
 #endif

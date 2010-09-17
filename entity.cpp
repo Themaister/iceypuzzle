@@ -70,6 +70,11 @@ void Wall::render(RenderWindow& app) const
    app.Draw(sprite);
 }
 
+bool Wall::is_floor() const
+{
+   return false;
+}
+
 Stone::Stone() {}
 void Stone::update()
 {
@@ -80,6 +85,11 @@ void Stone::update()
 void Stone::render(RenderWindow& app) const
 {
    app.Draw(sprite);
+}
+
+bool Stone::is_floor() const
+{
+   return false;
 }
 
 SlipStone::SlipStone() {}
@@ -93,6 +103,11 @@ void SlipStone::render(RenderWindow& app) const
    app.Draw(sprite);
 }
 
+bool SlipStone::is_floor() const
+{
+   return false;
+}
+
 Hero::Hero() {}
 void Hero::update()
 {
@@ -103,5 +118,26 @@ void Hero::update()
 void Hero::render(RenderWindow& app) const
 {
    app.Draw(sprite);
+}
+
+bool Hero::is_floor() const
+{
+   return false;
+}
+
+Floor::Floor() {}
+void Floor::update()
+{
+   obj_speed = Vector2i(0, 0);
+}
+
+void Floor::render(RenderWindow& app) const
+{
+   app.Draw(sprite);
+}
+
+bool Floor::is_floor() const
+{
+   return true;
 }
 

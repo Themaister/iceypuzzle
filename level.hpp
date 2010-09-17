@@ -26,11 +26,13 @@ class Level
       void check_collition();
       void update();
       void render();
+      bool is_won() const;
 
    private:
       std::vector<sf::Image> images;
       typedef std::shared_ptr<Entity> Entity_Ptr;
       std::vector<Entity_Ptr> entities;
+      std::vector<Entity_Ptr> floor;
       Entity_Ptr character;
 
       sf::RenderWindow& app;

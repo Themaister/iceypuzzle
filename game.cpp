@@ -1,7 +1,9 @@
 #include "game.hpp"
+#include <iostream>
 
 using namespace Game;
 using namespace sf;
+using namespace std;
 
 PuzzleGame::PuzzleGame(RenderWindow& in) : app(in), level(Level(app, "level.txt"))
 {
@@ -12,6 +14,11 @@ void PuzzleGame::run()
    bool running = true;
    while (running)
    {
+      if (level.is_won())
+      {
+         cout << "OMG U WON, SO 1337" << endl;
+         break;
+      }
       running = handle_input();
       level.handle_logic();
       level.check_collition();
