@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <utility>
 #include "utils.hpp"
 
 using namespace std;
@@ -54,30 +55,30 @@ void Level::LoadSprite(const Images::Images& type, int x, int y)
    switch (type)
    {
       case Images::Wall:
-         tmp = Entity_Ptr(new Wall);
+         tmp = make_shared<Wall>();
          break;
       case Images::Hero:
-         tmp = Entity_Ptr(new Hero);
+         tmp = make_shared<Hero>();
          character = tmp;
          break;
       case Images::Stone:
-         tmp = Entity_Ptr(new Stone);
+         tmp = make_shared<Stone>();
          break;
       case Images::Floor:
-         tmp = Entity_Ptr(new Floor);
+         tmp = make_shared<Floor>();
          floor.push_back(tmp);
          break;
       case Images::SlipFloor:
-         tmp = Entity_Ptr(new SlipperyFloor);
+         tmp = make_shared<SlipperyFloor>();
          floor.push_back(tmp);
          break;
       case Images::SwitchFloor:
-         tmp = Entity_Ptr(new Floor);
+         tmp = make_shared<Floor>();
          floor.push_back(tmp);
          switch_floor.push_back(tmp);
          break;
       case Images::Slip:
-         tmp = Entity_Ptr(new SlipStone);
+         tmp = make_shared<SlipStone>();
          break;
    }
    tmp->tile_size(tile_size);
