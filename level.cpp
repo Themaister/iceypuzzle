@@ -131,7 +131,7 @@ void Level::LoadLevelFromFile(const std::string& path)
          else if (*itr == 'H')
          {
             if (loaded_char)
-               throw runtime_error(join("Cannot have more than one character on map: (", x+1, ", ", y+1, ")"));
+               throw logic_error(join("Cannot have more than one character on map: (", x+1, ", ", y+1, ")"));
 
             LoadSprite(Images::Hero, x, y);
             loaded_char = true;
@@ -156,7 +156,7 @@ void Level::LoadLevelFromFile(const std::string& path)
          else if (*itr == '.' || *itr == ' ')
          {}
          else
-            throw runtime_error(join("Syntax error in file at: (", x+1, ", ", y+1, ")"));
+            throw logic_error(join("Syntax error in file at: (", x+1, ", ", y+1, ")"));
 
          if (*itr != 'W' && *itr != 'G' && *itr != 'Y')
             LoadSprite(Images::Floor, x, y);
@@ -169,13 +169,13 @@ void Level::LoadLevelFromFile(const std::string& path)
 
    if (!loaded_char)
    {
-      throw runtime_error(join("Missing character in file"));
+      throw logic_error(join("Missing character in file"));
    }
    in.close();
 
    if (switch_floor.size() == 0)
    {
-      throw runtime_error(join("Cannot have level without a win condition."));
+      throw logic_error(join("Cannot have level without a win condition."));
    }
 }
 

@@ -10,7 +10,7 @@ int main()
       Game::PuzzleGame game(app);
       game.run();
    }
-   catch (std::runtime_error& err)
+   catch (std::exception& err)
    {
       std::cerr << err.what() << std::endl;
    }
