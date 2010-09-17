@@ -5,7 +5,7 @@ namespace Game
 {
    namespace Movement
    {
-      enum Movement
+      enum Movement : unsigned
       {
          None = 0,
          Up,
@@ -17,7 +17,7 @@ namespace Game
 
    namespace Button
    {
-      enum Button
+      enum Button : unsigned
       {
          None = 0,
          A,
