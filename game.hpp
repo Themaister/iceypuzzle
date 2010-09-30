@@ -19,8 +19,8 @@ class PuzzleGame
    private:
       sf::RenderWindow& app;
       Level level;
-      Movement::Movement movement;
-      Button::Button button;
+      Movement movement;
+      Button button;
       bool handle_input();
 
 };

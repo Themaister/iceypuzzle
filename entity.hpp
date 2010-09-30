@@ -24,7 +24,7 @@ class Entity
       void speed(const sf::Vector2i& speed);
 
       void tile_size(const sf::Vector2i& size);
-      Movement::Movement direction() const;
+      Movement direction() const;
 
       bool operator==(const Entity& in);
 
@@ -34,7 +34,7 @@ class Entity
       sf::Sprite sprite;
       sf::Vector2i m_tile_size;
       sf::Vector2i obj_speed;
-      Movement::Movement dir;
+      Movement dir;
 };
 
 class Wall : public Entity

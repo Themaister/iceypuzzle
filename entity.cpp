@@ -44,7 +44,7 @@ void Entity::speed(const Vector2i& speed)
       dir = Movement::Up;
 }
 
-Movement::Movement Entity::direction() const
+Movement Entity::direction() const
 {
    return dir;
 }

@@ -11,20 +11,6 @@ namespace Game {
 
 class Entity;
 
-namespace Images
-{
-   typedef enum Images
-   {
-      Hero = 0,
-      Wall,
-      Stone,
-      Slip,
-      SwitchFloor,
-      Floor,
-      SlipFloor,
-   } Images;
-}
-
 class Level
 {
    public:
@@ -32,8 +18,8 @@ class Level
       Level(sf::RenderWindow& app, const std::string& in);
 
       void LoadLevelFromFile(const std::string& in);
-      void SetMovement(const Movement::Movement& mov);
-      void SetButton(const Button::Button& btn);
+      void SetMovement(const Movement& mov);
+      void SetButton(const Button& btn);
 
       void handle_logic();
       void check_collition();
@@ -53,12 +39,23 @@ class Level
       sf::RenderWindow& app;
       sf::Vector2i level_size;
       sf::Vector2i tile_size;
-      Movement::Movement movement;
-      Button::Button button;
+      Movement movement;
+      Button button;
       std::string m_path;
 
+      enum class ImageType : unsigned
+      {
+         Hero = 0,
+         Wall,
+         Stone,
+         Slip,
+         SwitchFloor,
+         Floor,
+         SlipFloor,
+      };
+
       void LoadPictures();
-      void LoadSprite(const Images::Images& type, int x, int y);
+      void LoadSprite(const ImageType& type, int x, int y);
 };
 }
 

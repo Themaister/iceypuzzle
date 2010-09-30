@@ -38,61 +38,61 @@ void Level::reset()
 void Level::LoadPictures()
 {
    images = vector<Image>(7);
-   images[Images::Hero].LoadFromFile("pics/hero.png");
-   images[Images::Wall].LoadFromFile("pics/wall.png");
-   images[Images::Stone].LoadFromFile("pics/stone.png");
-   images[Images::Slip].LoadFromFile("pics/slip.png");
-   images[Images::Floor].LoadFromFile("pics/floor.png");
-   images[Images::SwitchFloor].LoadFromFile("pics/switch_floor.png");
-   images[Images::SlipFloor].LoadFromFile("pics/slipfloor.png");
+   images[(unsigned)ImageType::Hero].LoadFromFile("pics/hero.png");
+   images[(unsigned)ImageType::Wall].LoadFromFile("pics/wall.png");
+   images[(unsigned)ImageType::Stone].LoadFromFile("pics/stone.png");
+   images[(unsigned)ImageType::Slip].LoadFromFile("pics/slip.png");
+   images[(unsigned)ImageType::Floor].LoadFromFile("pics/floor.png");
+   images[(unsigned)ImageType::SwitchFloor].LoadFromFile("pics/switch_floor.png");
+   images[(unsigned)ImageType::SlipFloor].LoadFromFile("pics/slipfloor.png");
 
-   tile_size = Vector2i(images[Images::Hero].GetWidth(), images[Images::Hero].GetHeight());
+   tile_size = Vector2i(images[(unsigned)ImageType::Hero].GetWidth(), images[(unsigned)ImageType::Hero].GetHeight());
 }
 
-void Level::LoadSprite(const Images::Images& type, int x, int y)
+void Level::LoadSprite(const ImageType& type, int x, int y)
 {
    Entity_Ptr tmp;
    switch (type)
    {
-      case Images::Wall:
+      case ImageType::Wall:
          tmp = make_shared<Wall>();
          break;
-      case Images::Hero:
+      case ImageType::Hero:
          tmp = make_shared<Hero>();
          character = tmp;
          break;
-      case Images::Stone:
+      case ImageType::Stone:
          tmp = make_shared<Stone>();
          break;
-      case Images::Floor:
+      case ImageType::Floor:
          tmp = make_shared<Floor>();
          floor.push_back(tmp);
          break;
-      case Images::SlipFloor:
+      case ImageType::SlipFloor:
          tmp = make_shared<SlipperyFloor>();
          floor.push_back(tmp);
          break;
-      case Images::SwitchFloor:
+      case ImageType::SwitchFloor:
          tmp = make_shared<Floor>();
          floor.push_back(tmp);
          switch_floor.push_back(tmp);
          break;
-      case Images::Slip:
+      case ImageType::Slip:
          tmp = make_shared<SlipStone>();
          break;
    }
    tmp->tile_size(tile_size);
-   tmp->SetImage(images[type]);
+   tmp->SetImage(images[(unsigned)type]);
    tmp->pos(Vector2i(x, y));
    entities.push_back(tmp);
 }
 
-void Level::SetMovement(const Movement::Movement& in)
+void Level::SetMovement(const Movement& in)
 {
    movement = in;
 }
 
-void Level::SetButton(const Button::Button& in)
+void Level::SetButton(const Button& in)
 {
    button = in;
 }
@@ -122,36 +122,36 @@ void Level::LoadLevelFromFile(const std::string& path)
          Entity_Ptr tmp;
          if (*itr == 'W')
          {
-            LoadSprite(Images::Wall, x, y);
+            LoadSprite(ImageType::Wall, x, y);
          }
          else if (*itr == 'S')
          {
-            LoadSprite(Images::Stone, x, y);
+            LoadSprite(ImageType::Stone, x, y);
          }
          else if (*itr == 'H')
          {
             if (loaded_char)
                throw logic_error(join("Cannot have more than one character on map: (", x+1, ", ", y+1, ")"));
 
-            LoadSprite(Images::Hero, x, y);
+            LoadSprite(ImageType::Hero, x, y);
             loaded_char = true;
          }
          else if (*itr == 'Z')
          {
-            LoadSprite(Images::Slip, x, y);
+            LoadSprite(ImageType::Slip, x, y);
          }
          else if (*itr == 'G')
          {
-            LoadSprite(Images::SwitchFloor, x, y);
+            LoadSprite(ImageType::SwitchFloor, x, y);
          }
          else if (*itr == 'X')
          {
-            LoadSprite(Images::SwitchFloor, x, y);
-            LoadSprite(Images::Slip, x, y);
+            LoadSprite(ImageType::SwitchFloor, x, y);
+            LoadSprite(ImageType::Slip, x, y);
          }
          else if (*itr == 'Y')
          {
-            LoadSprite(Images::SlipFloor, x, y);
+            LoadSprite(ImageType::SlipFloor, x, y);
          }
          else if (*itr == '.' || *itr == ' ')
          {}
@@ -159,7 +159,7 @@ void Level::LoadLevelFromFile(const std::string& path)
             throw logic_error(join("Syntax error in file at: (", x+1, ", ", y+1, ")"));
 
          if (*itr != 'W' && *itr != 'G' && *itr != 'Y')
-            LoadSprite(Images::Floor, x, y);
+            LoadSprite(ImageType::Floor, x, y);
       }
    }
 

@@ -3,26 +3,20 @@
 
 namespace Game
 {
-   namespace Movement
+   enum class Movement : unsigned
    {
-      enum Movement : unsigned
-      {
-         None = 0,
-         Up,
-         Down,
-         Left,
-         Right,
-      };
-   }
+      None = 0,
+      Up,
+      Down,
+      Left,
+      Right,
+   };
 
-   namespace Button
+   enum class Button : unsigned
    {
-      enum Button : unsigned
-      {
-         None = 0,
-         A,
-      };
-   }
+      None = 0,
+      A,
+   };
 }
 
 #endif
