@@ -2,6 +2,7 @@
 #define __GAME_HPP
 
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "level.hpp"
 #include "movement.hpp"
 
@@ -12,9 +13,9 @@ namespace Game
 class PuzzleGame
 {
    public:
-      PuzzleGame(sf::RenderWindow& in);
+      PuzzleGame(sf::RenderWindow& in, const char* level = "level.txt");
 
-      void run();
+      bool run();
 
    private:
       sf::RenderWindow& app;

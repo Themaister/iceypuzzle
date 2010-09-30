@@ -14,10 +14,8 @@ class Entity;
 class Level
 {
    public:
-      Level(sf::RenderWindow& app);
-      Level(sf::RenderWindow& app, const std::string& in);
+      Level(sf::RenderWindow& app, const char* in);
 
-      void LoadLevelFromFile(const std::string& in);
       void SetMovement(const Movement& mov);
       void SetButton(const Button& btn);
 
@@ -41,7 +39,7 @@ class Level
       sf::Vector2i tile_size;
       Movement movement;
       Button button;
-      std::string m_path;
+      const char *m_path;
 
       enum class ImageType : unsigned
       {
@@ -56,6 +54,7 @@ class Level
 
       void LoadPictures();
       void LoadSprite(const ImageType& type, int x, int y);
+      void LoadLevelFromFile(const char *in);
 };
 }
 

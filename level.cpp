@@ -12,15 +12,10 @@ using namespace sf;
 using namespace Game;
 
 
-Level::Level(RenderWindow& in) : app(in)
+Level::Level(RenderWindow& in, const char *path) : app(in), m_path(path)
 {
    app.UseVerticalSync(true);
    app.SetFramerateLimit(30);
-   LoadPictures();
-}
-
-Level::Level(RenderWindow& in, const string& path) : app(in), m_path(path)
-{
    LoadPictures();
    LoadLevelFromFile(m_path);
 }
@@ -97,11 +92,13 @@ void Level::SetButton(const Button& in)
    button = in;
 }
 
-void Level::LoadLevelFromFile(const std::string& path)
+void Level::LoadLevelFromFile(const char *path)
 {
    ifstream in(path);
    if (!in.is_open())
-      return;
+   {
+      throw runtime_error(join("Could not open level ", path, " ..."));
+   }
 
    bool loaded_char = false;
    string str;
@@ -171,7 +168,6 @@ void Level::LoadLevelFromFile(const std::string& path)
    {
       throw logic_error(join("Missing character in file"));
    }
-   in.close();
 
    if (switch_floor.size() == 0)
    {

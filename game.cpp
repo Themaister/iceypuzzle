@@ -5,11 +5,10 @@ using namespace Game;
 using namespace sf;
 using namespace std;
 
-PuzzleGame::PuzzleGame(RenderWindow& in) : app(in), level(Level(app, "level.txt"))
-{
-}
+PuzzleGame::PuzzleGame(RenderWindow& in, const char *level_path) : app(in), level(Level(app, level_path))
+{}
 
-void PuzzleGame::run()
+bool PuzzleGame::run()
 {
    bool running = true;
    while (running)
@@ -17,7 +16,7 @@ void PuzzleGame::run()
       if (level.is_won())
       {
          cout << "You win!" << endl;
-         break;
+         return true;
       }
       running = handle_input();
       level.handle_logic();
@@ -25,6 +24,7 @@ void PuzzleGame::run()
       level.update();
       level.render();
    }
+   return false;
 }
 
 bool PuzzleGame::handle_input()

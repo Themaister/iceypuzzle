@@ -12,4 +12,4 @@ clean:
 	rm -f $(OBJ)
 
 %.o: %.cpp
-	$(CXX) -c -o $@ $< -std=gnu++0x -O2 -Wall -Wextra
+	$(CXX) -c -o $@ $< -std=gnu++0x -g -Wall -Wextra
